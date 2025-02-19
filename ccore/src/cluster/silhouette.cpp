@@ -7,7 +7,7 @@
 */
 
 #include <pyclustering/cluster/silhouette.hpp>
-
+#include <limits>      // 避免因使用std::numeric_limits报错
 
 namespace pyclustering {
 

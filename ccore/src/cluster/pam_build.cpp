@@ -8,7 +8,7 @@
 
 
 #include <pyclustering/cluster/pam_build.hpp>
-
+#include <limits>      // 避免因使用std::numeric_limits报错
 #include <algorithm>
 #include <numeric>
 #include <unordered_set>

@@ -7,7 +7,7 @@
 */
 
 #include <pyclustering/nnet/dynamic_analyser.hpp>
-
+#include <limits>      // 避免因使用std::numeric_limits报错
 #include <sstream>
 #include <stdexcept>
 

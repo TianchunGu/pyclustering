@@ -13,7 +13,7 @@
 #include <functional>
 #include <numeric>
 #include <vector>
-
+#include <limits>      // 避免因使用std::numeric_limits报错
 #include <pyclustering/cluster/data_type.hpp>
 
 #include <pyclustering/utils/metric.hpp>

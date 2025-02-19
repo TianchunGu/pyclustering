@@ -7,7 +7,7 @@
 */
 
 #include <pyclustering/nnet/som.hpp>
-
+#include <limits>      // 避免因使用std::numeric_limits报错
 #include <chrono>
 #include <cmath>
 #include <climits>

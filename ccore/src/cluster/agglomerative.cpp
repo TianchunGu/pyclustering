@@ -5,7 +5,7 @@
 @copyright BSD-3-Clause
 
 */
-
+#include <limits>      // 避免因使用std::numeric_limits报错
 #include <pyclustering/cluster/agglomerative.hpp>
 #include <pyclustering/utils/metric.hpp>
 

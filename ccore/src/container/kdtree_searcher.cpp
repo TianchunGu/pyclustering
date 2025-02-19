@@ -7,7 +7,7 @@
 */
 
 #include <pyclustering/container/kdtree_searcher.hpp>
-
+#include <limits>      // 避免因使用std::numeric_limits报错
 #include <pyclustering/utils/metric.hpp>
 
 

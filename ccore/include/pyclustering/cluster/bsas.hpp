@@ -8,7 +8,7 @@
 
 #pragma once
 
-
+#include <limits>      // 避免因使用std::numeric_limits报错
 #include <pyclustering/cluster/bsas_data.hpp>
 
 #include <pyclustering/utils/metric.hpp>
