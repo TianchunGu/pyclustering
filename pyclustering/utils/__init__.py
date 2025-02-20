@@ -10,7 +10,7 @@
 
 import time
 import numpy
-
+import csv
 
 from numpy import array
 from PIL import Image
@@ -25,10 +25,53 @@ from pyclustering.utils.metric import distance_metric, type_metric
 ## The number \f$pi\f$ is a mathematical constant, the ratio of a circle's circumference to its diameter.
 pi = 3.14159265359
 
+"""
+def read_sample(filename, return_type='list'):
+
+    #@brief Returns data sample from simple text file.
+    #@details This function should be used for text file with following format:
+    #@code
+    #    point_1_coord_1 point_1_coord_2 ... point_1_coord_n
+    #    point_2_coord_1 point_2_coord_2 ... point_2_coord_n
+    #    ... ...
+    #@endcode
+
+    #As an example there is a 3-dimensional data that contains four points:
+    #@code
+    #    0.1 0.4 0.1
+    #    0.5 0.6 0.7
+    #    2.3 2.1 2.9
+    #    1.9 2.5 2.0
+    #@endcode
+
+    #In case of this example the following container is going to be produced:
+    #@code
+    #    [[0.1, 0.4, 0.1], [0.5, 0.6, 0.7], [2.3, 2.1, 2.9], [1.9, 2.5, 2.0]]
+    #@endcode
+
+    #@param[in] filename (string): Path to file with data.
+    #@param[in] return_type (string): Defines return type of the data (`list` or `numpy`).
+    
+    #@return (array_like) Points where each point represented by coordinates.
+    
+    
+    file = open(filename, 'r')
+
+    if return_type == 'list':
+        sample = [[float(val) for val in line.split()] for line in file if len(line.strip()) > 0]
+    elif return_type == 'numpy':
+        sample = numpy.array([numpy.array([float(val) for val in line.split()])
+                              for line in file if len(line.strip()) > 0])
+    else:
+        raise ValueError("Incorrect 'return_type' is specified '%s'." % return_type)
+
+    file.close()
+    return sample
+"""
 
 def read_sample(filename, return_type='list'):
     """!
-    @brief Returns data sample from simple text file.
+    @brief Returns data sample from simple text file or csv file.
     @details This function should be used for text file with following format:
     @code
         point_1_coord_1 point_1_coord_2 ... point_1_coord_n
@@ -49,6 +92,8 @@ def read_sample(filename, return_type='list'):
         [[0.1, 0.4, 0.1], [0.5, 0.6, 0.7], [2.3, 2.1, 2.9], [1.9, 2.5, 2.0]]
     @endcode
 
+    For csv files, each row should contain the coordinates of a point separated by commas.
+
     @param[in] filename (string): Path to file with data.
     @param[in] return_type (string): Defines return type of the data (`list` or `numpy`).
     
@@ -56,17 +101,28 @@ def read_sample(filename, return_type='list'):
     
     """
     
-    file = open(filename, 'r')
-
-    if return_type == 'list':
-        sample = [[float(val) for val in line.split()] for line in file if len(line.strip()) > 0]
-    elif return_type == 'numpy':
-        sample = numpy.array([numpy.array([float(val) for val in line.split()])
-                              for line in file if len(line.strip()) > 0])
+    if filename.endswith('.csv'):
+        with open(filename, 'r') as file:
+            reader = csv.reader(file)
+            # Skip the header row
+            next(reader, None)
+            if return_type == 'list':
+                sample = [[float(val) for val in row] for row in reader if len(row) > 0]
+            elif return_type == 'numpy':
+                sample = numpy.array([numpy.array([float(val) for val in row]) for row in reader if len(row) > 0])
+            else:
+                raise ValueError("Incorrect 'return_type' is specified '%s'." % return_type)
     else:
-        raise ValueError("Incorrect 'return_type' is specified '%s'." % return_type)
+        file = open(filename, 'r')
+        if return_type == 'list':
+            sample = [[float(val) for val in line.split()] for line in file if len(line.strip()) > 0]
+        elif return_type == 'numpy':
+            sample = numpy.array([numpy.array([float(val) for val in line.split()])
+                                  for line in file if len(line.strip()) > 0])
+        else:
+            raise ValueError("Incorrect 'return_type' is specified '%s'." % return_type)
+        file.close()
 
-    file.close()
     return sample
 
 
