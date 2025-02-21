@@ -245,9 +245,9 @@ class fcm:
         self.__membership = result[wrapper.fcm_package_indexer.INDEX_MEMBERSHIP]
         # 还未完全修改--改了
         self.__iteration = result[wrapper.fcm_package_indexer.INDEX_ITERATION]
-        self.__totallIterationTime = result[wrapper.fcm_package_indexer.TOTALLTERATIONTIME]
-        self.__averageIterationTime = result[wrapper.fcm_package_indexer.AVERAGELTERATIONTIME]
-        self.__classifyTime = result[wrapper.fcm_package_indexer.CLASSIFYTIME]
+        self.__totallIterationTime = result[wrapper.fcm_package_indexer.INDEX_TOTALLTERATIONTIME]
+        self.__averageIterationTime = result[wrapper.fcm_package_indexer.INDEX_AVERAGELTERATIONTIME]
+        self.__classifyTime = result[wrapper.fcm_package_indexer.INDEX_CLASSIFYTIME]
 
 
     def __process_by_python(self):
