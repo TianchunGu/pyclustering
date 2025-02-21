@@ -19,6 +19,10 @@ class fcm_package_indexer:
     INDEX_CLUSTERS = 0
     INDEX_CENTERS = 1
     INDEX_MEMBERSHIP = 2
+    INDEX_ITERATION = 0
+    INDEX_TOTALLTERATIONTIME = 0.0
+    INDEX_AVERAGELTERATIONTIME = 0.0
+    INDEX_CLASSIFYTIME = 0.0
 
 
 def fcm_algorithm(sample, centers, m, tolerance, itermax):

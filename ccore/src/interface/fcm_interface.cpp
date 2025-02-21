@@ -33,6 +33,10 @@ pyclustering_package * fcm_algorithm(const pyclustering_package * const p_sample
     ((pyclustering_package **) package->data)[FCM_PACKAGE_INDEX_CLUSTERS] = create_package(&output_result.clusters());
     ((pyclustering_package **) package->data)[FCM_PACKAGE_INDEX_CENTERS] = create_package(&output_result.centers());
     ((pyclustering_package **) package->data)[FCM_PACKAGE_INDEX_MEMBERSHIP] = create_package(&output_result.membership());
+    ((pyclustering_package **) package->data)[FCM_PACKAGE_INDEX_ITERATION] = create_package(1,output_result.iteration());
+    ((pyclustering_package **) package->data)[FCM_PACKAGE_INDEX_TOTALLTERATIONTIME] = create_package(1,output_result.total_iteration_time());
+    ((pyclustering_package **) package->data)[FCM_PACKAGE_INDEX_AVERAGELTERATIONTIME] = create_package(1,output_result.average_iteration_time());
+    ((pyclustering_package **) package->data)[FCM_PACKAGE_INDEX_CLASSIFYTIME] = create_package(1,output_result.classify_time());
 
     return package;
 }

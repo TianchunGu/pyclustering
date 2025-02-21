@@ -13,6 +13,7 @@
 
 #include <pyclustering/parallel/parallel.hpp>
 
+#include <chrono>//测量时间所需头文件
 
 using namespace pyclustering::parallel;
 using namespace pyclustering::utils::metric;
@@ -53,15 +54,29 @@ void fcm::process(const dataset & p_data, fcm_data & p_result) {
     // 将隶属度矩阵的大小调整为 m_ptr_data->size() 行（样本数量）和 m_initial_centers.size() 列（聚类中心数量），并把矩阵中的所有元素初始化为 0.0
     m_ptr_result->membership().resize(m_ptr_data->size(), point(m_initial_centers.size(), 0.0));
 
-    double current_change = std::numeric_limits<double>::max();
+    float current_change = std::numeric_limits< float>::max();
     // 循环迭代
     std::size_t iteration = 0;//记录迭代次数
+    // 测量总循环迭代时间
+    auto startTotalTime = std::chrono::steady_clock::now();//计时开始
     for(iteration = 0; iteration < m_itermax && current_change > m_tolerance; iteration++) {
         update_membership();
         current_change = update_centers();
     }
+    auto  endTotalTime = std::chrono::steady_clock::now();//计时结束
+    float  totalduration_second = std::chrono::duration< float>( endTotalTime - startTotalTime).count();//计算时间差
+    // 设置相关参数
+    m_ptr_result->set_iteration(iteration);
+    m_ptr_result->set_total_iteration_time( totalduration_second);
+    m_ptr_result->set_average_iteration_time( totalduration_second/iteration);
 
+    // 从模糊C均值（Fuzzy C-Means）算法的结果中提取出各个聚类的成员（即每个数据点属于哪个聚类）
+    // 测量分类时间
+    auto startClassifyTime = std::chrono::steady_clock::now();//计时开始
     extract_clusters(m_ptr_result->clusters());
+    auto  endClassifyTime = std::chrono::steady_clock::now();//计时结束
+    float  Classify_second = std::chrono::duration< float>( endClassifyTime - startClassifyTime).count();//计算时间差
+    m_ptr_result->set_classify_time(Classify_second);
 }
 
 
@@ -143,7 +158,8 @@ void fcm::update_point_membership(const std::size_t p_index) {
     }
 }
 
-
+// 从模糊C均值（Fuzzy C-Means）算法的结果中提取出各个聚类的成员（即每个数据点属于哪个聚类）。
+// 串行实现
 void fcm::extract_clusters(cluster_sequence & p_clusters) {
     m_ptr_result->clusters() = cluster_sequence(m_ptr_result->centers().size());
     for (std::size_t i = 0; i < m_ptr_data->size(); i++) {

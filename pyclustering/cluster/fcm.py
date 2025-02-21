@@ -111,6 +111,10 @@ class fcm:
         self.__clusters = []
         self.__centers = initial_centers
         self.__membership = []
+        self.__iteration = 0
+        self.__totallIterationTime = 0.0
+        self.__averageIterationTime = 0.0
+        self.__classifyTime = 0.0
 
         self.__tolerance = kwargs.get('tolerance', 0.001)
         self.__itermax = kwargs.get('itermax', 200)
@@ -188,7 +192,46 @@ class fcm:
 
         """
         return self.__membership
+    
+    def get_iteration(self):
+        """
+        @brief Returns the number of iterations performed during the clustering process.
 
+        @return (int) Number of iterations.
+
+        @see process()
+        """
+        return self.__iteration
+    
+    def get_total_iteration_time(self):
+        """
+        @brief Returns the total time spent on all iterations during the clustering process.
+
+        @return (float) Total iteration time in seconds.
+
+        @see process()
+        """
+        return self.__totallIterationTime
+    
+    def get_average_iteration_time(self):
+        """
+        @brief Returns the average time spent per iteration during the clustering process.
+
+        @return (float) Average iteration time in seconds.
+
+        @see process()
+        """
+        return self.__averageIterationTime
+
+    def get_classify_time(self):
+        """
+        @brief Returns the time spent on the classification step during the clustering process.
+
+        @return (float) Classification time in seconds.
+
+        @see process()
+        """
+        return self.__classifyTime
 
     def __process_by_ccore(self):
         """!
@@ -200,6 +243,11 @@ class fcm:
         self.__clusters = result[wrapper.fcm_package_indexer.INDEX_CLUSTERS]
         self.__centers = result[wrapper.fcm_package_indexer.INDEX_CENTERS]
         self.__membership = result[wrapper.fcm_package_indexer.INDEX_MEMBERSHIP]
+        # 还未完全修改--改了
+        self.__iteration = result[wrapper.fcm_package_indexer.INDEX_ITERATION]
+        self.__totallIterationTime = result[wrapper.fcm_package_indexer.TOTALLTERATIONTIME]
+        self.__averageIterationTime = result[wrapper.fcm_package_indexer.AVERAGELTERATIONTIME]
+        self.__classifyTime = result[wrapper.fcm_package_indexer.CLASSIFYTIME]
 
 
     def __process_by_python(self):
