@@ -50,12 +50,13 @@ void fcm::process(const dataset & p_data, fcm_data & p_result) {
     m_ptr_result->centers().assign(m_initial_centers.begin(), m_initial_centers.end());
 
     if (m_itermax == 0) { return; }
-
+    // 将隶属度矩阵的大小调整为 m_ptr_data->size() 行（样本数量）和 m_initial_centers.size() 列（聚类中心数量），并把矩阵中的所有元素初始化为 0.0
     m_ptr_result->membership().resize(m_ptr_data->size(), point(m_initial_centers.size(), 0.0));
 
     double current_change = std::numeric_limits<double>::max();
-
-    for(std::size_t iteration = 0; iteration < m_itermax && current_change > m_tolerance; iteration++) {
+    // 循环迭代
+    std::size_t iteration = 0;//记录迭代次数
+    for(iteration = 0; iteration < m_itermax && current_change > m_tolerance; iteration++) {
         update_membership();
         current_change = update_centers();
     }
@@ -70,12 +71,12 @@ void fcm::verify() const {
     }
 }
 
-
+// 求出新旧聚类中心变化的最大值
 double fcm::update_centers() {
     const std::size_t amount_centers = m_ptr_result->centers().size();
 
     std::vector<double> changes(amount_centers, 0.0);
-
+    // 并行实现，（如何实现还不清楚）
     parallel_for(std::size_t(0), amount_centers, [this, &changes](const std::size_t p_index) {
         changes[p_index] = update_center(p_index);
     });
@@ -83,7 +84,7 @@ double fcm::update_centers() {
     return *(std::max_element(changes.cbegin(), changes.cend()));
 }
 
-
+// 更新聚类中心（单维度）
 double fcm::update_center(const std::size_t p_index) {
     const std::size_t dimensions = m_ptr_data->at(0).size();
     const std::size_t data_length = m_ptr_data->size();
