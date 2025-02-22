@@ -64,7 +64,8 @@ void fcm::process(const dataset & p_data, fcm_data & p_result) {
         current_change = update_centers();
     }
     auto  endTotalTime = std::chrono::steady_clock::now();//计时结束
-    float  totalduration_second = std::chrono::duration< float>( endTotalTime - startTotalTime).count();//计算时间差
+    // 计算毫秒（ms）时间
+    float  totalduration_second = std::chrono::duration<float,std::milli>( endTotalTime - startTotalTime).count();//计算时间差
     // 设置相关参数
     m_ptr_result->set_iteration(iteration);
     m_ptr_result->set_total_iteration_time( totalduration_second);
@@ -75,7 +76,8 @@ void fcm::process(const dataset & p_data, fcm_data & p_result) {
     auto startClassifyTime = std::chrono::steady_clock::now();//计时开始
     extract_clusters(m_ptr_result->clusters());
     auto  endClassifyTime = std::chrono::steady_clock::now();//计时结束
-    float  Classify_second = std::chrono::duration< float>( endClassifyTime - startClassifyTime).count();//计算时间差
+    // 计算毫秒（ms）时间
+    float  Classify_second = std::chrono::duration<float,std::milli>( endClassifyTime - startClassifyTime).count();//计算时间差
     m_ptr_result->set_classify_time(Classify_second);
 }
 

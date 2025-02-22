@@ -24,10 +24,10 @@ total_iteration_time = fcm_instance.get_total_iteration_time()
 average_iteration_time = fcm_instance.get_average_iteration_time()
 classify_time = fcm_instance.get_classify_time()
 
-print("iteration:"+str(iteration))
-print("total_iteration_time:"+str(total_iteration_time))
-print("average_iteration_time:"+str(average_iteration_time))
-print("classify_timen:"+str(classify_time))
+print("iteration:"+str(iteration)+"次")
+print("total_iteration_time:"+str(total_iteration_time)+"ms")
+print("average_iteration_time:"+str(average_iteration_time)+"ms")
+print("classify_timen:"+str(classify_time)+"ms")
 
 # 输出聚类标签
 # 初始化一个列表，长度与数据点相同，初始值为-1（表示未分配）
