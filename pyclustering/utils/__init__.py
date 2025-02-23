@@ -100,28 +100,52 @@ def read_sample(filename, return_type='list'):
     @return (array_like) Points where each point represented by coordinates.
     
     """
-    
-    if filename.endswith('.csv'):
+    file_extension = filename.split('.')[-1].lower()  # 获取文件扩展名
+
+    if file_extension == 'csv':
         with open(filename, 'r') as file:
             reader = csv.reader(file)
-            # Skip the header row
+            # 跳过 CSV 文件的表头（如果存在）
             next(reader, None)
-            if return_type == 'list':
-                sample = [[float(val) for val in row] for row in reader if len(row) > 0]
-            elif return_type == 'numpy':
-                sample = numpy.array([numpy.array([float(val) for val in row]) for row in reader if len(row) > 0])
-            else:
-                raise ValueError("Incorrect 'return_type' is specified '%s'." % return_type)
+            sample = []
+            for row in reader:
+                if not row:
+                    continue  # 跳过空行
+                # 跳过空值
+                filtered_row = [val for val in row if val.strip()]
+                if not filtered_row:
+                    continue
+                # 转换为浮点数
+                point = [float(val) for val in filtered_row]
+                if return_type == 'list':
+                    sample.append(point)
+                elif return_type == 'numpy':
+                    sample.append(numpy.array(point))
+                else:
+                    raise ValueError("Incorrect 'return_type' is specified '%s'." % return_type)
+        if return_type == 'numpy':
+            sample = numpy.array(sample)
     else:
-        file = open(filename, 'r')
-        if return_type == 'list':
-            sample = [[float(val) for val in line.split()] for line in file if len(line.strip()) > 0]
-        elif return_type == 'numpy':
-            sample = numpy.array([numpy.array([float(val) for val in line.split()])
-                                  for line in file if len(line.strip()) > 0])
-        else:
-            raise ValueError("Incorrect 'return_type' is specified '%s'." % return_type)
-        file.close()
+        with open(filename, 'r') as file:
+            sample = []
+            for line in file:
+                line = line.strip()
+                if not line:
+                    continue  # 跳过空行
+                # 分割行内容，跳过空值
+                values = [val for val in line.split() if val.strip()]
+                if not values:
+                    continue
+                # 转换为浮点数
+                point = [float(val) for val in values]
+                if return_type == 'list':
+                    sample.append(point)
+                elif return_type == 'numpy':
+                    sample.append(numpy.array(point))
+                else:
+                    raise ValueError("Incorrect 'return_type' is specified '%s'." % return_type)
+        if return_type == 'numpy':
+            sample = numpy.array(sample)
 
     return sample
 
