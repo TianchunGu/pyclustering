@@ -2,13 +2,21 @@ from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
 from pyclustering.cluster.fcm import fcm
 from pyclustering.utils import read_sample
 from pyclustering.cluster import cluster_visualizer
-
+import time
 # 加载数据集（可以替换为自己的数据）
 from pyclustering.samples.definitions import FAMOUS_SAMPLES
+
+startRead = time.perf_counter() #开始时间
 sample = read_sample("../DataSet/S1.csv")
+endRead = time.perf_counter() #结束时间
+timeOfReadData = (endRead-startRead)*1000
+
 
 # 使用K-Means++算法初始化聚类中心
+startInitial = time.perf_counter() #开始时间
 initial_centers = kmeans_plusplus_initializer(sample, 15, kmeans_plusplus_initializer.FARTHEST_CENTER_CANDIDATE).initialize()
+endInitial = time.perf_counter() #结束时间
+timeOfInitial = (endInitial-startInitial)*1000
 
 # 创建Fuzzy C-Means实例，启用C++实现（默认启用）
 fcm_instance = fcm(sample, initial_centers)
@@ -25,6 +33,8 @@ average_iteration_time = fcm_instance.get_average_iteration_time()
 classify_time = fcm_instance.get_classify_time()
 
 print("iteration:"+str(iteration)+"次")
+print("timeOfReadData:"+str(timeOfReadData)+"ms")
+print("timeOfInitial:"+str(timeOfInitial)+"ms")
 print("total_iteration_time:"+str(total_iteration_time)+"ms")
 print("average_iteration_time:"+str(average_iteration_time)+"ms")
 print("classify_timen:"+str(classify_time)+"ms")
